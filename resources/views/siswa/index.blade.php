@@ -45,11 +45,13 @@
                                     <td>
                                         <a href="{{ route('siswas.show', $siswa->nisn) }}"><span class="badge bg-secondary"><i class="bi bi-eye"></i></span></a>
                                         <a href="{{ route('siswas.edit', $siswa->nisn) }}"><span class="badge bg-warning"><i class="bi bi-pencil-square"></i></span></a>
-                                        <a href="#" onclick="event.preventDefault(); confirmDelete({{ $siswa->nisn }});" class="text-decoration-none">
+                                        <a href="#" onclick="event.preventDefault(); confirmDelete('{{ $siswa->nisn }}');" class="text-decoration-none">
                                             <span class="badge bg-danger">
                                                 <i class="bi bi-trash"></i>
                                             </span>
                                         </a>
+                                        
+                                        {{-- Form tidak perlu diubah --}}
                                         <form id="delete-form-{{ $siswa->nisn }}" action="{{ route('siswas.destroy', $siswa->nisn) }}" method="POST" style="display: none;">
                                             @csrf
                                             @method('DELETE')

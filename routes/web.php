@@ -19,6 +19,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -26,17 +27,23 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('siswas', SiswaController::class);
     Route::resource('kriterias', KriteriaController::class);
-    Route::get('/penilaians/filter', [PenilaianController::class, 'filterPeriode'])
-     ->name('penilaians.filter');
-    Route::resource('penilaians', PenilaianController::class);
     
 
     Route::post('/import-siswa', [SiswaController::class, 'import'])->name('siswas.import');
 
     Route::get('/perhitungan', [PerhitunganController::class, 'index'])->name('perhitungan.index');
 
-    Route::get('/hasil', [HasilController::class, 'index'])->name('hasil.index');
-    Route::get('/hasil/pdf', [HasilController::class, 'generatePDF'])->name('hasil.pdf');
+});
+
+// Grup route untuk Penilaian (mungkin perlu middleware auth)
+Route::prefix('penilaian')->name('penilaian.')->middleware('auth')->group(function () {
+    Route::get('/', [PenilaianController::class, 'index'])->name('index');
+    Route::get('/{siswa:nisn}/edit', [PenilaianController::class, 'edit'])->name('edit');
+    Route::put('/{siswa:nisn}', [PenilaianController::class, 'update'])->name('update');
+});
+Route::prefix('hasil')->name('hasil.')->middleware('auth')->group(function () {
+    Route::get('/', [HasilController::class, 'index'])->name('index');
+    Route::get('/pdf', [HasilController::class, 'generatePdf'])->name('pdf');
 });
 
 require __DIR__ . '/auth.php';

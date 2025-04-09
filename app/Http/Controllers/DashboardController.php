@@ -2,32 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kriteria;
-use App\Models\Siswa;
-use App\Models\Penilaian;
-use App\Models\Hasil;
+use App\Models\Hasil;       // Import model Hasil
+use App\Models\Kriteria;   // Import model Kriteria
+use App\Models\Penilaian;  // Import model Penilaian
+use App\Models\Siswa;      // Import model Siswa
 use Illuminate\Http\Request;
+use Illuminate\View\View; // Import View
 
 class DashboardController extends Controller
 {
-    public function index()
+    /**
+     * Menampilkan halaman dashboard utama.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index(): View
     {
-        $kriteriaCount = Kriteria::count();
+        // 1. Hitung Jumlah Siswa
         $alternatifCount = Siswa::count();
 
-        // Menghitung jumlah penilaian yang dikelompokkan berdasarkan siswa
-        $penilaianCount = Penilaian::select('nisn')
-            ->groupBy('nisn')
-            ->get()
-            ->count();
+        // 2. Hitung Jumlah Kriteria
+        $kriteriaCount = Kriteria::count();
 
+        // 3. Hitung Jumlah Penilaian
+        $penilaianCount = Penilaian::count();
+
+        // 4. Hitung Jumlah Hasil dan Data Hasil
         $hasilCount = Hasil::count();
+        $hasil      = Hasil::all();
 
-        $query = Hasil::with('siswa')->orderBy('nilai_akhir', 'desc');
-
-        $hasil = $query->get();
+        // 5. Data Kriteria
         $kriterias = Kriteria::all();
 
-        return view('dashboard', compact('kriteriaCount', 'alternatifCount', 'penilaianCount', 'hasilCount', 'hasil', 'kriterias'));
+        // Kirim data ke view
+        return view('dashboard', [
+            'alternatifCount' => $alternatifCount,
+            'kriteriaCount' => $kriteriaCount,
+            'hasilCount' => $hasilCount,
+            'hasil' => $hasil,
+            'kriterias' => $kriterias,
+            'penilaianCount' => $penilaianCount,
+        ]);
     }
 }

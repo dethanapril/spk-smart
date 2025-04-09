@@ -110,7 +110,7 @@
             </li><!-- End Kriteria Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('penilaians.index') ? '' : 'collapsed' }}" href="{{ route('penilaians.index') }}">
+                <a class="nav-link {{ request()->routeIs('penilaian.index') ? '' : 'collapsed' }}" href="{{ route('penilaian.index') }}">
                     <i class="bi bi-bar-chart"></i>
                     <span>Data Penilaian</span>
                 </a>

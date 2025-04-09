@@ -78,7 +78,7 @@
                 <div class="col-xxl-3 col-md-6">
                     <div class="card info-card success-card">
                         <div class="card-body">
-                            <h5 class="card-title">Alternatif</h5>
+                            <h5 class="card-title">Siswa</h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-people fs-4"></i>
@@ -151,7 +151,7 @@
                                     <td>{{ $item->siswa->nama }}</td>
                                     <td>
                                         <span class="badge bg-primary rounded-pill">
-                                            {{ $item->nilai_akhir }}
+                                            {{ $item->nilai_total_smart }}
                                         </span>
                                     </td>
                                 </tr>

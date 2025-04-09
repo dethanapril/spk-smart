@@ -1,4 +1,28 @@
 @extends('layouts.app')
+<style>
+    /* Style untuk membatasi lebar kolom tabel agar tidak terlalu lebar */
+    .table-perhitungan th, .table-perhitungan td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 0.4rem; /* Perkecil padding */
+        white-space: nowrap; /* Hindari text wrap jika memungkinkan */
+    }
+    .table-perhitungan th:first-child, .table-perhitungan td:first-child {
+        text-align: left;
+        white-space: normal; /* Izinkan wrap untuk nama */
+        min-width: 150px; /* Lebar minimum kolom nama */
+    }
+    .table-responsive {
+        margin-bottom: 1rem;
+    }
+    .card {
+        margin-bottom: 1.5rem;
+    }
+    /* Atur font lebih kecil di tabel */
+    .table-perhitungan {
+        font-size: 0.85rem;
+    }
+</style>
 @section('content')
     <div class="pagetitle">
         <h1>Perhitungan SPK Metode SMART</h1>
@@ -13,156 +37,234 @@
 
     <section class="section dashboard">
         <div class="row">
-            <!-- Form untuk memilih periode -->
-            <div class="col-lg-12">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Filter Periode</h5>
-                        <form action="{{ route('perhitungan.index') }}" method="GET">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <label for="periode" class="form-label fw-semibold">Pilih Periode</label>
-                                    <select id="periode" name="periode" class="form-select form-select-md">
-                                        @for($year = now()->year - 2; $year <= now()->year + 2; $year++)
-                                            <option value="{{ $year }}" {{ $year == $periode ? 'selected' : '' }}>
-                                                {{ $year }}
-                                            </option>
-                                        @endfor
-                                    </select>
-                                </div>
-                                <div class="col-md-4 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        <i class="bi bi-filter me-1"></i> Terapkan Filter
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>            
-            </div>
 
-            <!-- Langkah 1: Normalisasi Bobot Kriteria -->
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Langkah 1: Normalisasi Bobot Kriteria</h5>
-                        <p>Normalisasi bobot kriteria dilakukan dengan cara membagi setiap bobot dengan total bobot kriteria.</p>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Kriteria</th>
-                                    <th>Jenis</th>
-                                    <th>Bobot Asli</th>
-                                    <th>Bobot Normalisasi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($kriterias as $kriteria)
-                                <tr>
-                                    <td>{{ $kriteria->nama }}</td>
-                                    <td>{{ $kriteria->jenis }}</td>
-                                    <td>{{ $kriteria->bobot }}</td>
-                                    <td>{{ number_format($bobotNormalisasi[$kriteria->nama], 3) }}</td>
-                                </tr>
+            @if($calculationData['has_errors'] && !empty($calculationData['error_messages']))
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Perhitungan Gagal!</h4>
+            <p>Terjadi kesalahan yang mencegah perhitungan dilanjutkan atau disimpan:</p>
+            <ul>
+                @foreach ($calculationData['error_messages'] as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @else
+        {{-- Tampilkan Peringatan Jika Ada --}}
+        @if(!empty($calculationData['warning_messages']))
+            <div class="alert alert-warning" role="alert">
+                <strong>Peringatan:</strong>
+                <ul>
+                    @foreach ($calculationData['warning_messages'] as $warning)
+                        <li>{{ $warning }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        {{-- Tampilkan Pesan Sukses Jika Ada --}}
+         @if(!empty($calculationData['success_message']))
+            <div class="alert alert-success" role="alert">
+                {{ $calculationData['success_message'] }}
+            </div>
+        @endif
+
+
+        {{-- Card 0: Bobot Kriteria --}}
+        <div class="card">
+            <div class="card-header"><i class="fas fa-weight-hanging me-1"></i> Tahap 0: Bobot Kriteria (Setelah Normalisasi Jika Perlu)</div>
+            <div class="card-body">
+                 <div class="table-responsive">
+                     <table class="table table-bordered table-sm table-perhitungan">
+                         <thead>
+                             <tr>
+                                 <th>ID</th>
+                                 <th>Nama Kriteria</th>
+                                 <th>Bobot Awal</th>
+                                 <th>Bobot Normal</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             @foreach($calculationData['bobot_kriteria'] as $id => $bobotInfo)
+                             <tr>
+                                 <td>{{ $id }}</td>
+                                 <td style="text-align: left;">{{ $bobotInfo['nama'] }}</td>
+                                 <td>{{ number_format($bobotInfo['bobot_awal'], 3) }}</td>
+                                 <td>{{ number_format($bobotInfo['bobot_normal'], 3) }}</td>
+                             </tr>
+                             @endforeach
+                             <tr class="table-light">
+                                <td colspan="3" style="text-align: right;"><strong>Total Bobot Normal:</strong></td>
+                                <td><strong>{{ number_format(collect($calculationData['bobot_kriteria'])->sum('bobot_normal'), 3) }}</strong></td>
+                            </tr>
+                         </tbody>
+                     </table>
+                 </div>
+            </div>
+        </div>
+
+
+        {{-- Card 1: Data Agregasi --}}
+        <div class="card">
+            <div class="card-header"><i class="fas fa-layer-group me-1"></i> Tahap 1: Nilai Agregat (Total per Siswa per Kriteria)</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm table-perhitungan">
+                        <thead>
+                            <tr>
+                                <th>Siswa (NISN)</th>
+                                @foreach ($calculationData['kriterias'] as $kriteria)
+                                    <th>{{ $kriteria->nama }} (C{{ $kriteria->id }})</th>
                                 @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($calculationData['siswas'] as $siswa)
                                 <tr>
-                                    <td class="text-center" colspan="2"><strong>Total</strong></td>
-                                    <td><strong>{{ $kriterias->sum('bobot') }}</strong></td>
-                                    <td><strong>{{ number_format(array_sum($bobotNormalisasi), 3) }}</strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Langkah 2: Menghitung Nilai Utility -->
-            <div class="col-lg-12">
-                <div class="card recent-sales">
-                    <div class="card-body">
-                        <h5 class="card-title">Langkah 2: Menghitung Nilai Utility</h5>
-                        <table class="table datatable">
-                            <thead>
-                                <tr>
-                                    <th>NISN</th>
-                                    <th>Nama</th>
-                                    @foreach($kriterias as $kriteria)
-                                    <th>{{ $kriteria->nama }}</th>
+                                    <td>{{ $siswa->nama }} ({{ $siswa->nisn }})</td>
+                                    @foreach ($calculationData['kriterias'] as $kriteria)
+                                        <td>{{ $calculationData['data_agregasi'][$siswa->nisn][$kriteria->id] ?? '-' }}</td>
                                     @endforeach
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($data as $siswa)
-                                <tr>
-                                    <td>{{ $siswa->nisn }}</td>
-                                    <td>{{ $siswa->nama }}</td>
-                                    @foreach($kriterias as $kriteria)
-                                    <td>{{ number_format($siswa->utility[$kriteria->nama], 3) }}</td>
-                                    @endforeach
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Langkah 3: Menghitung Nilai Akhir -->
-            <div class="col-lg-12">
-                <div class="card recent-sales">
-                    <div class="card-body">
-                        <h5 class="card-title">Langkah 3: Menghitung Nilai Akhir</h5>
-                        <p>Nilai akhir dihitung dengan menjumlahkan semua nilai utility yang telah dikalikan dengan bobot normalisasi.</p>
-                        <table class="table datatable">
-                            <thead>
-                                <tr>
-                                    <th>NISN</th>
-                                    <th>Nama</th>
-                                    <th>Nilai Akhir</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($data as $siswa)
-                                <tr>
-                                    <td>{{ $siswa->nisn }}</td>
-                                    <td>{{ $siswa->nama }}</td>
-                                    <td>{{ $siswa->nilai_akhir }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Langkah 4: 10 Nilai Tertinggi -->
-            <div class="col-lg-12">
-                <div class="card recent-sales">
-                    <div class="card-body">
-                        <h5 class="card-title">Langkah 4: 10 Nilai Tertinggi</h5>
-                        <table class="table datatable">
-                            <thead>
-                                <tr>
-                                    <th>Rank</th>
-                                    <th>NISN</th>
-                                    <th>Nama</th>
-                                    <th>Nilai Akhir</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($sortedData as $index => $siswa)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $siswa->nisn }}</td>
-                                    <td>{{ $siswa->nama }}</td>
-                                    <td>{{ $siswa->nilai_akhir }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+
+         {{-- Card 2: Nilai Min/Max Kriteria --}}
+        <div class="card">
+            <div class="card-header"><i class="fas fa-arrows-alt-v me-1"></i> Tahap 2: Nilai Minimum & Maksimum per Kriteria</div>
+            <div class="card-body">
+                 <div class="table-responsive">
+                     <table class="table table-bordered table-sm table-perhitungan">
+                         <thead>
+                             <tr>
+                                 <th>Kriteria</th>
+                                 <th>Nilai Minimum</th>
+                                 <th>Nilai Maksimum</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             @foreach($calculationData['kriterias'] as $kriteria)
+                             <tr>
+                                 <td style="text-align: left;">{{ $kriteria->nama }} (C{{ $kriteria->id }})</td>
+                                 <td>{{ $calculationData['min_max_values'][$kriteria->id]['min'] ?? 'N/A' }}</td>
+                                 <td>{{ $calculationData['min_max_values'][$kriteria->id]['max'] ?? 'N/A' }}</td>
+                             </tr>
+                             @endforeach
+                         </tbody>
+                     </table>
+                 </div>
+            </div>
+        </div>
+
+
+        {{-- Card 3: Matriks Normalisasi (Utility) --}}
+        <div class="card">
+            <div class="card-header"><i class="fas fa-ruler-combined me-1"></i> Tahap 3: Matriks Normalisasi (Nilai Utility 0-1)</div>
+            <div class="card-body">
+                 <div class="table-responsive">
+                    <table class="table table-bordered table-sm table-perhitungan">
+                        <thead>
+                            <tr>
+                                <th>Siswa (NISN)</th>
+                                @foreach ($calculationData['kriterias'] as $kriteria)
+                                    <th>{{ $kriteria->nama }} (C{{ $kriteria->id }}) <br><small>({{ ucfirst($kriteria->jenis) }})</small></th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($calculationData['siswas'] as $siswa)
+                                <tr>
+                                    <td>{{ $siswa->nama }} ({{ $siswa->nisn }})</td>
+                                    @foreach ($calculationData['kriterias'] as $kriteria)
+                                        {{-- Format nilai utility --}}
+                                        <td>{{ number_format($calculationData['data_normalisasi'][$siswa->nisn][$kriteria->id] ?? 0, 4) }}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {{-- Card 4: Matriks Terbobot --}}
+        <div class="card">
+            <div class="card-header"><i class="fas fa-balance-scale me-1"></i> Tahap 4: Matriks Nilai Terbobot (Utility * Bobot)</div>
+            <div class="card-body">
+                 <div class="table-responsive">
+                    <table class="table table-bordered table-sm table-perhitungan">
+                        <thead>
+                            <tr>
+                                <th>Siswa (NISN)</th>
+                                @foreach ($calculationData['kriterias'] as $kriteria)
+                                     <th>{{ $kriteria->nama }} (C{{ $kriteria->id }}) <br><small>(Bobot: {{ number_format($calculationData['bobot_kriteria'][$kriteria->id]['bobot_normal'] ?? 0, 3) }})</small></th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($calculationData['siswas'] as $siswa)
+                                <tr>
+                                    <td>{{ $siswa->nama }} ({{ $siswa->nisn }})</td>
+                                    @foreach ($calculationData['kriterias'] as $kriteria)
+                                         {{-- Format nilai terbobot --}}
+                                        <td>{{ number_format($calculationData['data_terbobot'][$siswa->nisn][$kriteria->id] ?? 0, 4) }}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {{-- Card 5: Hasil Akhir & Ranking --}}
+        <div class="card">
+            <div class="card-header"><i class="fas fa-trophy me-1"></i> Tahap 5 & 6: Hasil Akhir dan Perankingan</div>
+            <div class="card-body">
+                 <div class="table-responsive">
+                     {{-- Urutkan berdasarkan ranking sebelum ditampilkan --}}
+                     @php
+                        $sortedHasil = collect($calculationData['hasil_final_ranking'])->sortBy('ranking')->all();
+                     @endphp
+                     <table class="table table-bordered table-striped table-sm table-perhitungan">
+                         <thead class="table-light">
+                             <tr>
+                                 <th>Ranking</th>
+                                 <th>NISN</th>
+                                 <th>Nama Siswa</th>
+                                 <th>Kelas</th>
+                                 <th>Nilai Akhir SMART</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             @forelse($sortedHasil as $nisn => $hasil)
+                                 <tr>
+                                     <td><strong>{{ $hasil['ranking'] }}</strong></td>
+                                     <td>{{ $hasil['nisn'] }}</td>
+                                     <td style="text-align: left;">{{ $hasil['nama'] }}</td>
+                                     <td>{{ $hasil['kelas'] }}</td>
+                                     <td><strong>{{ number_format($hasil['nilai_total_smart'], 5) }}</strong></td>
+                                 </tr>
+                             @empty
+                                 <tr>
+                                    <td colspan="5" class="text-center">
+                                        @if($calculationData['has_errors'])
+                                            Hasil akhir tidak dapat ditampilkan karena terjadi error pada proses perhitungan.
+                                        @else
+                                            Belum ada hasil perhitungan yang tersimpan.
+                                        @endif
+                                    </td>
+                                 </tr>
+                             @endforelse
+                         </tbody>
+                     </table>
+                 </div>
+            </div>
+        </div>
+
+    @endif {{-- End else jika tidak ada error fatal --}}
     </section>
 @endsection

@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kriterias', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama', 50);
+            $table->id(); // Primary key auto-increment standar
+            $table->string('kode_kriteria')->unique()->nullable(); // Tambahan: Kode unik (C1, C2, etc.), boleh null jika tidak dipakai
+            $table->string('nama', 255); // Nama kriteria (Nilai Raport, Presensi, etc.)
             $table->enum('jenis', ['benefit', 'cost']);
             $table->float('bobot');
-            $table->timestamps();
+            $table->timestamps(); // Kolom created_at dan updated_at
         });
     }
 

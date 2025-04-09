@@ -13,64 +13,76 @@
 
     <section class="section">
         <div class="row">
-            <div class="col-lg-9">
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Form Edit Penilaian</h5>
 
                         <!-- General Form Elements -->
-                        <form method="POST" action="{{ route('penilaians.update', $siswa->nisn) }}">
+                        <form action="{{ route('penilaian.update', $siswa->nisn) }}" method="POST">
                             @csrf
-                            @method('PUT')
-
-                            <!-- Pilih Siswa (readonly) -->
-                            <div class="row mb-3">
-                                <label class="col-sm-3 col-form-label">Siswa</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" value="{{ $siswa->nama }}" readonly>
-                                    <input type="hidden" name="nisn" value="{{ $siswa->nisn }}">
-                                </div>
+                            @method('PUT') {{-- Atau POST jika route Anda POST --}}
+            
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="text-center align-middle" style="width: 20%;">Kriteria</th>
+                                            @foreach ($semesters as $semester)
+                                                <th class="text-center">Semester {{ $semester }}</th>
+                                            @endforeach
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($kriterias as $kriteria)
+                                            <tr>
+                                                <td class="align-middle">
+                                                    <strong>{{ $kriteria->nama }}</strong> <br>
+                                                    <small class="text-muted">({{ ucfirst($kriteria->jenis) }})</small>
+                                                </td>
+                                                @foreach ($semesters as $semester)
+                                                    <td>
+                                                        {{-- Nama input dibuat array: nilai[id_kriteria][nomor_semester] --}}
+                                                        <input
+                                                            type="number"
+                                                            step="any" {{-- Izinkan desimal --}}
+                                                            class="form-control form-control-sm @error('nilai.' . $kriteria->id . '.' . $semester) is-invalid @enderror"
+                                                            name="nilai[{{ $kriteria->id }}][{{ $semester }}]"
+                                                            {{-- Ambil nilai dari map jika ada, jika tidak kosongkan --}}
+                                                            value="{{ old('nilai.' . $kriteria->id . '.' . $semester, $nilaiMap[$kriteria->id][$semester] ?? '') }}"
+                                                            placeholder="Nilai {{ $semester }}"
+                                                            {{-- Tambahkan atribut lain jika perlu (min, max) --}}
+                                                            min="0"
+                                                            >
+                                                         @error('nilai.' . $kriteria->id . '.' . $semester)
+                                                            <div class="invalid-feedback">
+                                                                {{ $message }}
+                                                            </div>
+                                                        @enderror
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="{{ count($semesters) + 1 }}" class="text-center">
+                                                    Belum ada data kriteria. Silakan tambahkan kriteria terlebih dahulu.
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
                             </div>
-
-                            <!-- Pilih Periode -->
-                            <div class="row mb-3">
-                                <label for="periode" class="col-sm-3 col-form-label">Periode</label>
-                                <div class="col-sm-9">
-                                    <select name="periode" class="form-select">
-                                        <option value="">Pilih Periode</option>
-                                        @for ($year = now()->year - 2; $year <= now()->year + 2; $year++)
-                                            <option value="{{ $year }}" {{ $year == old('periode', $periode) ? 'selected' : '' }}>
-                                                {{ $year }}
-                                            </option>
-                                        @endfor
-                                    </select>   
-                                    @if ($errors->has('periode'))
-                                        <span class="text-danger">{{ $errors->first('periode') }}</span>
-                                    @endif
-                                </div>
+            
+                            <div class="d-flex justify-content-end mt-3">
+                                 <a href="{{ route('penilaian.index') }}" class="btn btn-secondary me-2">
+                                     <i class="fas fa-arrow-left me-1"></i> Kembali ke Daftar Siswa
+                                 </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-1"></i> Simpan Perubahan Nilai
+                                </button>
                             </div>
-
-                            <!-- Input Nilai untuk Setiap Kriteria -->
-                            @foreach ($kriterias as $kriteria)
-                            <div class="row mb-3">
-                                <label for="nilai[{{ $kriteria->id }}]" class="col-sm-3 col-form-label">{{ $kriteria->nama }}</label>
-                                <div class="col-sm-9">
-                                    <input type="text" name="nilai[{{ $kriteria->id }}]" class="form-control" 
-                                           value="{{ old('nilai.' . $kriteria->id, $penilaians[$kriteria->id]->nilai ?? '') }}" 
-                                           placeholder="Masukkan Nilai {{ $kriteria->nama }}">
-                                    @if ($errors->has('nilai.' . $kriteria->id))
-                                        <span class="text-danger">{{ $errors->first('nilai.' . $kriteria->id) }}</span>
-                                    @endif
-                                </div>
-                            </div>
-                            @endforeach
-
-                            <div class="row mb-3">
-                                <div class="col-sm-9 offset-sm-3">
-                                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
-                                </div>
-                            </div>
-                        </form><!-- End General Form Elements -->
+            
+                        </form>
 
                     </div>
                 </div>
