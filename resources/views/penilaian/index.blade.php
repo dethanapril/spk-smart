@@ -22,34 +22,36 @@
                         <a class="btn btn-sm btn-primary" href="{{ route('penilaians.create') }}"><i class="bi bi-plus"></i></a>
                     </div> --}}
                     <h5 class="card-title">Daftar Penilaian Siswa</h5>
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>NISN</th>
-                                <th>Nama Siswa</th>
-                                <th>Kelas</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($siswas as $siswa)
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
                                 <tr>
-                                    <td>{{ $siswa->nisn }}</td>
-                                    <td>{{ $siswa->nama }}</td>
-                                    <td>{{ $siswa->kelas }}</td>
-                                    <td>
-                                        <a href="{{ route('penilaian.edit', $siswa->nisn) }}" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-edit me-1"></i> Kelola Nilai
-                                        </a>
-                                    </td>
+                                    <th>NISN</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Kelas</th>
+                                    <th>Aksi</th>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center">Tidak ada data siswa.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @forelse ($siswas as $siswa)
+                                    <tr>
+                                        <td>{{ $siswa->nisn }}</td>
+                                        <td>{{ $siswa->nama }}</td>
+                                        <td>{{ $siswa->kelas }}</td>
+                                        <td>
+                                            <a href="{{ route('penilaian.edit', $siswa->nisn) }}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit me-1"></i> Kelola Nilai
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">Tidak ada data siswa.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

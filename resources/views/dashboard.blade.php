@@ -147,7 +147,7 @@
                                 @foreach ($hasil as $index => $item)
                                 <tr>
                                     <th scope="row">{{ $index + 1 }}</th>
-                                    <td>{{ $item->nisn }}</td>
+                                    <td>{{ $item->siswa_nisn }}</td>
                                     <td>{{ $item->siswa->nama }}</td>
                                     <td>
                                         <span class="badge bg-primary rounded-pill">

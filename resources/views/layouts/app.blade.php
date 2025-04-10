@@ -89,42 +89,42 @@
         <ul class="sidebar-nav" id="sidebar-nav">
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('dashboard') ? '' : 'collapsed' }}" href="/dashboard">
+                <a class="nav-link {{ request()->routeIs('dashboard') ? '' : 'collapsed' }}" href="/dashboard">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
             </li><!-- End Dashboard Nav -->
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('siswas.index') ? '' : 'collapsed' }}" href="{{ route('siswas.index') }}">
+                <a class="nav-link {{ request()->routeIs('siswas.*') ? '' : 'collapsed' }}" href="{{ route('siswas.index') }}">
                     <i class="bi bi-menu-button-wide"></i>
                     <span>Data Siswa</span>
                 </a>
             </li><!-- End Alternative Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('kriterias.index') ? '' : 'collapsed' }}" href="{{ route('kriterias.index') }}">
+                <a class="nav-link {{ request()->routeIs('kriterias.*') ? '' : 'collapsed' }}" href="{{ route('kriterias.index') }}">
                     <i class="bi bi-journal-text"></i>
                     <span>Data Kriteria</span>
                 </a>
             </li><!-- End Kriteria Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('penilaian.index') ? '' : 'collapsed' }}" href="{{ route('penilaian.index') }}">
+                <a class="nav-link {{ request()->routeIs('penilaian.*') ? '' : 'collapsed' }}" href="{{ route('penilaian.index') }}">
                     <i class="bi bi-bar-chart"></i>
                     <span>Data Penilaian</span>
                 </a>
             </li><!-- End Nilai Alternative Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('perhitungan.index') ? '' : 'collapsed' }}" href="{{ route('perhitungan.index') }}">
+                <a class="nav-link {{ request()->routeIs('perhitungan.*') ? '' : 'collapsed' }}" href="{{ route('perhitungan.index') }}">
                     <i class="bi bi-layout-text-window-reverse"></i>
                     <span>Data Perhitungan</span>
                 </a>
             </li><!-- End Hasil Perhitungan Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('hasil.index') ? '' : 'collapsed' }}" href="{{ route('hasil.index') }}">
+                <a class="nav-link {{ request()->routeIs('hasil.*') ? '' : 'collapsed' }}" href="{{ route('hasil.index') }}">
                     <i class="bi bi-layout-text-window-reverse"></i>
                     <span>Laporan</span>
                 </a>

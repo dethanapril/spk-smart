@@ -21,102 +21,105 @@
                             <button class="btn btn-sm btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal"><i class="bi bi-plus"></i></button>
                         </div>
                         <!-- Table with stripped rows -->
-                        <table class="table datatable">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>
-                                    <th>Jenis</th>
-                                    <th>Bobot</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($kriterias as $kriteria)
+                        <div class="table-responsive">
+                            <table class="table datatable">
+                                <thead>
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $kriteria->nama }}</td>
-                                        <td>{{ $kriteria->jenis }}</td>
-                                        <td>{{ $kriteria->bobot }} %</td>
-                                        <td>
-                                            <span style="cursor: pointer" class="badge bg-secondary" data-bs-toggle="modal" data-bs-target="#showModal{{ $kriteria->id }}"><i class="bi bi-eye"></i></span>
-                                            <span style="cursor: pointer" class="badge bg-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ $kriteria->id }}"><i class="bi bi-pencil-square"></i></span>
-                                            <span style="cursor: pointer" class="badge bg-danger" onclick="confirmDelete({{ $kriteria->id }})"><i class="bi bi-trash"></i></span>
-                                            <form id="delete-form-{{ $kriteria->id }}" action="{{ route('kriterias.destroy', $kriteria->id) }}" method="POST" style="display: none;">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
-                                        </td>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>Jenis</th>
+                                        <th>Bobot</th>
+                                        <th>Aksi</th>
                                     </tr>
-
-                                    <!-- Show Modal -->
-                                    <div class="modal fade" id="showModal{{ $kriteria->id }}" tabindex="-1" aria-labelledby="showModalLabel{{ $kriteria->id }}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="showModalLabel{{ $kriteria->id }}">Detail Kriteria</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p><strong>Nama:</strong> {{ $kriteria->nama }}</p>
-                                                    <p><strong>Jenis:</strong> {{ $kriteria->jenis }}</p>
-                                                    <p><strong>Bobot:</strong> {{ $kriteria->bobot }} %</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Edit Modal -->
-                                    <div class="modal fade" id="editModal{{ $kriteria->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $kriteria->id }}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="editModalLabel{{ $kriteria->id }}">Edit Kriteria</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form method="POST" action="{{ route('kriterias.update', $kriteria->id) }}">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <div class="mb-3">
-                                                            <label for="nama" class="form-label">Nama</label>
-                                                            <input type="text" name="nama" class="form-control" value="{{ $kriteria->nama }}">
-                                                            @if ($errors->has('nama'))
-                                                                <span class="text-danger">{{ $errors->first('nama') }}</span>
-                                                            @endif
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="jenis" class="form-label">Jenis</label>
-                                                            <select name="jenis" class="form-control">
-                                                                <option value="benefit" {{ $kriteria->jenis == 'benefit' ? 'selected' : '' }}>Benefit</option>
-                                                                <option value="cost" {{ $kriteria->jenis == 'cost' ? 'selected' : '' }}>Cost</option>
-                                                            </select>
-                                                            @if ($errors->has('jenis'))
-                                                                <span class="text-danger">{{ $errors->first('jenis') }}</span>
-                                                            @endif
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="bobot" class="form-label">Bobot</label>
-                                                            <input type="text" name="bobot" class="form-control" value="{{ $kriteria->bobot }}">
-                                                            @if ($errors->has('bobot'))
-                                                                <span class="text-danger">{{ $errors->first('bobot') }}</span>
-                                                            @endif
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary">Update</button>
-                                                        </div>
-                                                    </form>
+                                </thead>
+                                <tbody>
+                                    @foreach ($kriterias as $kriteria)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $kriteria->nama }}</td>
+                                            <td>{{ $kriteria->jenis }}</td>
+                                            <td>{{ $kriteria->bobot }} %</td>
+                                            <td>
+                                                <span style="cursor: pointer" class="badge bg-secondary" data-bs-toggle="modal" data-bs-target="#showModal{{ $kriteria->id }}"><i class="bi bi-eye"></i></span>
+                                                <span style="cursor: pointer" class="badge bg-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ $kriteria->id }}"><i class="bi bi-pencil-square"></i></span>
+                                                <span style="cursor: pointer" class="badge bg-danger" onclick="confirmDelete({{ $kriteria->id }})"><i class="bi bi-trash"></i></span>
+                                                <form id="delete-form-{{ $kriteria->id }}" action="{{ route('kriterias.destroy', $kriteria->id) }}" method="POST" style="display: none;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+                                            </td>
+                                        </tr>
+    
+                                        <!-- Show Modal -->
+                                        <div class="modal fade" id="showModal{{ $kriteria->id }}" tabindex="-1" aria-labelledby="showModalLabel{{ $kriteria->id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="showModalLabel{{ $kriteria->id }}">Detail Kriteria</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p><strong>Nama:</strong> {{ $kriteria->nama }}</p>
+                                                        <p><strong>Jenis:</strong> {{ $kriteria->jenis }}</p>
+                                                        <p><strong>Bobot:</strong> {{ $kriteria->bobot }} %</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                            </tbody>
-                        </table>
+    
+                                        <!-- Edit Modal -->
+                                        <div class="modal fade" id="editModal{{ $kriteria->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $kriteria->id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editModalLabel{{ $kriteria->id }}">Edit Kriteria</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST" action="{{ route('kriterias.update', $kriteria->id) }}">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <div class="mb-3">
+                                                                <label for="nama" class="form-label">Nama</label>
+                                                                <input type="text" name="nama" class="form-control" value="{{ $kriteria->nama }}">
+                                                                @if ($errors->has('nama'))
+                                                                    <span class="text-danger">{{ $errors->first('nama') }}</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="jenis" class="form-label">Jenis</label>
+                                                                <select name="jenis" class="form-control">
+                                                                    <option value="benefit" {{ $kriteria->jenis == 'benefit' ? 'selected' : '' }}>Benefit</option>
+                                                                    <option value="cost" {{ $kriteria->jenis == 'cost' ? 'selected' : '' }}>Cost</option>
+                                                                </select>
+                                                                @if ($errors->has('jenis'))
+                                                                    <span class="text-danger">{{ $errors->first('jenis') }}</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="bobot" class="form-label">Bobot</label>
+                                                                <input type="text" name="bobot" class="form-control" value="{{ $kriteria->bobot }}">
+                                                                @if ($errors->has('bobot'))
+                                                                    <span class="text-danger">{{ $errors->first('bobot') }}</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
                         <!-- End Table with stripped rows -->
                     </div>
                 </div>

@@ -25,42 +25,44 @@
                         <a class="btn btn-sm btn-primary" href="{{ route('siswas.create') }}"><i class="bi bi-plus"></i></a>
                     </div>
                     <!-- Table with stripped rows -->
-                    <table class="table datatable">
-                        <thead>
-                            <tr>
-                                <th>NISN</th>
-                                <th>Nama</th>
-                                <th>Kelas</th>
-                                <th>Jenis Kelamin</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($siswas as $siswa)
+                    <div class="table-responsive">
+                        <table class="table datatable">
+                            <thead>
                                 <tr>
-                                    <td>{{ $siswa->nisn }}</td>
-                                    <td>{{ $siswa->nama }}</td>
-                                    <td>{{ $siswa->kelas }}</td>
-                                    <td>{{ $siswa->jeniskelamin }}</td>
-                                    <td>
-                                        <a href="{{ route('siswas.show', $siswa->nisn) }}"><span class="badge bg-secondary"><i class="bi bi-eye"></i></span></a>
-                                        <a href="{{ route('siswas.edit', $siswa->nisn) }}"><span class="badge bg-warning"><i class="bi bi-pencil-square"></i></span></a>
-                                        <a href="#" onclick="event.preventDefault(); confirmDelete('{{ $siswa->nisn }}');" class="text-decoration-none">
-                                            <span class="badge bg-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </span>
-                                        </a>
-                                        
-                                        {{-- Form tidak perlu diubah --}}
-                                        <form id="delete-form-{{ $siswa->nisn }}" action="{{ route('siswas.destroy', $siswa->nisn) }}" method="POST" style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-                                    </td>
+                                    <th>NISN</th>
+                                    <th>Nama</th>
+                                    <th>Kelas</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>Aksi</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($siswas as $siswa)
+                                    <tr>
+                                        <td>{{ $siswa->nisn }}</td>
+                                        <td>{{ $siswa->nama }}</td>
+                                        <td>{{ $siswa->kelas }}</td>
+                                        <td>{{ $siswa->jeniskelamin }}</td>
+                                        <td>
+                                            <a href="{{ route('siswas.show', $siswa->nisn) }}"><span class="badge bg-secondary"><i class="bi bi-eye"></i></span></a>
+                                            <a href="{{ route('siswas.edit', $siswa->nisn) }}"><span class="badge bg-warning"><i class="bi bi-pencil-square"></i></span></a>
+                                            <a href="#" onclick="event.preventDefault(); confirmDelete('{{ $siswa->nisn }}');" class="text-decoration-none">
+                                                <span class="badge bg-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </span>
+                                            </a>
+                                            
+                                            {{-- Form tidak perlu diubah --}}
+                                            <form id="delete-form-{{ $siswa->nisn }}" action="{{ route('siswas.destroy', $siswa->nisn) }}" method="POST" style="display: none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- End Table with stripped rows -->
                 </div>
             </div>
