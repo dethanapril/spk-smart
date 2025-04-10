@@ -70,45 +70,45 @@
 
 
         {{-- Card 0: Bobot Kriteria --}}
-        <div class="card">
-            <div class="card-header"><i class="fas fa-weight-hanging me-1"></i> Tahap 0: Bobot Kriteria (Setelah Normalisasi Jika Perlu)</div>
+        <div class="card recent-sales">
             <div class="card-body">
-                 <div class="table-responsive">
-                     <table class="table table-bordered table-sm table-perhitungan">
-                         <thead>
-                             <tr>
-                                 <th>ID</th>
-                                 <th>Nama Kriteria</th>
-                                 <th>Bobot Awal</th>
-                                 <th>Bobot Normal</th>
-                             </tr>
-                         </thead>
-                         <tbody>
-                             @foreach($calculationData['bobot_kriteria'] as $id => $bobotInfo)
-                             <tr>
-                                 <td>{{ $id }}</td>
-                                 <td style="text-align: left;">{{ $bobotInfo['nama'] }}</td>
-                                 <td>{{ number_format($bobotInfo['bobot_awal'], 3) }}</td>
-                                 <td>{{ number_format($bobotInfo['bobot_normal'], 3) }}</td>
-                             </tr>
-                             @endforeach
-                             <tr class="table-light">
-                                <td colspan="3" style="text-align: right;"><strong>Total Bobot Normal:</strong></td>
-                                <td><strong>{{ number_format(collect($calculationData['bobot_kriteria'])->sum('bobot_normal'), 3) }}</strong></td>
+                <h5 class="card-title">Tahap 0: Bobot Kriteria (Setelah Normalisasi Jika Perlu)</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm table-perhitungan">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Kriteria</th>
+                                <th>Bobot Awal</th>
+                                <th>Bobot Normal</th>
                             </tr>
-                         </tbody>
-                     </table>
-                 </div>
+                        </thead>
+                        <tbody>
+                            @foreach($calculationData['bobot_kriteria'] as $id => $bobotInfo)
+                            <tr>
+                                <td>{{ $id }}</td>
+                                <td style="text-align: left;">{{ $bobotInfo['nama'] }}</td>
+                                <td>{{ number_format($bobotInfo['bobot_awal'], 3) }}</td>
+                                <td>{{ number_format($bobotInfo['bobot_normal'], 3) }}</td>
+                            </tr>
+                            @endforeach
+                            <tr class="table-light">
+                            <td colspan="3" style="text-align: right;"><strong>Total Bobot Normal:</strong></td>
+                            <td><strong>{{ number_format(collect($calculationData['bobot_kriteria'])->sum('bobot_normal'), 3) }}</strong></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
 
         {{-- Card 1: Data Agregasi --}}
-        <div class="card">
-            <div class="card-header"><i class="fas fa-layer-group me-1"></i> Tahap 1: Nilai Agregat (Total per Siswa per Kriteria)</div>
+        <div class="card recent-sales">
             <div class="card-body">
+                <h5 class="card-title">Tahap 1: Nilai Agregat (Total per Siswa per Kriteria)</h5>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-perhitungan">
+                    <table class="table table-bordered table-sm table-perhitungan datatable">
                         <thead>
                             <tr>
                                 <th>Siswa (NISN)</th>
@@ -133,11 +133,11 @@
         </div>
 
          {{-- Card 2: Nilai Min/Max Kriteria --}}
-        <div class="card">
-            <div class="card-header"><i class="fas fa-arrows-alt-v me-1"></i> Tahap 2: Nilai Minimum & Maksimum per Kriteria</div>
+        <div class="card recent-sales">
             <div class="card-body">
+                <h5 class="card-title">Tahap 2: Nilai Minimum & Maksimum per Kriteria</h5>
                  <div class="table-responsive">
-                     <table class="table table-bordered table-sm table-perhitungan">
+                     <table class="table table-bordered table-sm table-perhitungan datatable">
                          <thead>
                              <tr>
                                  <th>Kriteria</th>
@@ -161,11 +161,11 @@
 
 
         {{-- Card 3: Matriks Normalisasi (Utility) --}}
-        <div class="card">
-            <div class="card-header"><i class="fas fa-ruler-combined me-1"></i> Tahap 3: Matriks Normalisasi (Nilai Utility 0-1)</div>
+        <div class="card recent-sales">
             <div class="card-body">
+                <h1 class="card-title">Tahap 3: Matriks Normalisasi (Nilai Utility 0-1)</h1>
                  <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-perhitungan">
+                    <table class="table table-bordered table-sm table-perhitungan datatable">
                         <thead>
                             <tr>
                                 <th>Siswa (NISN)</th>
@@ -191,11 +191,11 @@
         </div>
 
         {{-- Card 4: Matriks Terbobot --}}
-        <div class="card">
-            <div class="card-header"><i class="fas fa-balance-scale me-1"></i> Tahap 4: Matriks Nilai Terbobot (Utility * Bobot)</div>
+        <div class="card recent-sales">
             <div class="card-body">
+                <h1 class="card-title">Tahap 4: Matriks Nilai Terbobot (Utility * Bobot)</h1>
                  <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-perhitungan">
+                    <table class="table table-bordered table-sm table-perhitungan datatable">
                         <thead>
                             <tr>
                                 <th>Siswa (NISN)</th>
@@ -221,15 +221,16 @@
         </div>
 
         {{-- Card 5: Hasil Akhir & Ranking --}}
-        <div class="card">
-            <div class="card-header"><i class="fas fa-trophy me-1"></i> Tahap 5 & 6: Hasil Akhir dan Perankingan</div>
+        <div class="card recent-sales">
+            <div class="card-header text-primary"><i class="fas fa-trophy me-1"></i> </div>
             <div class="card-body">
+                <h5 class="card-title">Tahap 5 & 6: Hasil Akhir dan Perankingan</h5>
                  <div class="table-responsive">
                      {{-- Urutkan berdasarkan ranking sebelum ditampilkan --}}
                      @php
                         $sortedHasil = collect($calculationData['hasil_final_ranking'])->sortBy('ranking')->all();
                      @endphp
-                     <table class="table table-bordered table-striped table-sm table-perhitungan">
+                     <table class="table table-bordered table-striped table-sm table-perhitungan datatable">
                          <thead class="table-light">
                              <tr>
                                  <th>Ranking</th>

@@ -33,6 +33,7 @@ class HasilController extends Controller
         // Ambil SEMUA data hasil yang sudah diranking untuk laporan
         $allHasil = Hasil::with('siswa')
                          ->orderBy('ranking', 'asc')
+                         ->take(10)
                          ->get();
 
         // Cek jika tidak ada data hasil

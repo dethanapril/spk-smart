@@ -18,7 +18,7 @@ class PenilaianController extends Controller
     public function index(): View
     {
         // Ambil semua siswa, mungkin dengan pagination jika banyak
-        $siswas = Siswa::orderBy('nama')->paginate(15); // Contoh pagination
+        $siswas = Siswa::orderBy('nisn')->get(); // Contoh pagination
 
         return view('penilaian.index', compact('siswas'));
     }

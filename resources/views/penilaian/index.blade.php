@@ -23,7 +23,7 @@
                     </div> --}}
                     <h5 class="card-title">Daftar Penilaian Siswa</h5>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-bordered table-hover datatable">
                             <thead>
                                 <tr>
                                     <th>NISN</th>
@@ -38,7 +38,7 @@
                                         <td>{{ $siswa->nisn }}</td>
                                         <td>{{ $siswa->nama }}</td>
                                         <td>{{ $siswa->kelas }}</td>
-                                        <td>
+                                        <td class="text-center">
                                             <a href="{{ route('penilaian.edit', $siswa->nisn) }}" class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit me-1"></i> Kelola Nilai
                                             </a>
