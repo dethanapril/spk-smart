@@ -68,7 +68,7 @@
                                     <i class="bi bi-list-check fs-4"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h2 class="mb-0">{{ $kriteriaCount }}</h2>
+                                    <h2 class="mb-0">{{ $kriteria ?? 0 }}</h2>
                                 </div>
                             </div>
                         </div>
@@ -78,13 +78,13 @@
                 <div class="col-xxl-3 col-md-6">
                     <div class="card info-card success-card">
                         <div class="card-body">
-                            <h5 class="card-title">Siswa</h5>
+                            <h5 class="card-title">Siswa Berprestasi</h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-people fs-4"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h2 class="mb-0">{{ $alternatifCount }}</h2>
+                                    <h2 class="mb-0">{{ $siswaBerprestasi ?? 0 }}</h2>
                                 </div>
                             </div>
                         </div>
@@ -94,13 +94,13 @@
                 <div class="col-xxl-3 col-md-6">
                     <div class="card info-card warning-card">
                         <div class="card-body">
-                            <h5 class="card-title">Penilaian</h5>
+                            <h5 class="card-title">Rata-rata Nilai</h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-clipboard-data fs-4"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h2 class="mb-0">{{ $penilaianCount }}</h2>
+                                    <h2 class="mb-0">{{ $rataNilai ?? 0 }}</h2>
                                 </div>
                             </div>
                         </div>
@@ -110,13 +110,13 @@
                 <div class="col-xxl-3 col-md-6">
                     <div class="card info-card danger-card">
                         <div class="card-body">
-                            <h5 class="card-title">Hasil Akhir</h5>
+                            <h5 class="card-title">Siswa</h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-trophy fs-4"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h2 class="mb-0">{{ $hasilCount }}</h2>
+                                    <h2 class="mb-0">{{ $siswa ?? 0 }}</h2>
                                 </div>
                             </div>
                         </div>
@@ -127,14 +127,14 @@
 
         <!-- Top Students Table -->
         <div class="col-12">
-            <div class="card">
+            <div class="card recent-sales">
                 <div class="card-body">
                     <h5 class="card-title d-flex align-items-center">
                         <i class="bi bi-arrow-up-right-circle me-2"></i>
                         Top 10 Siswa Berprestasi
                     </h5>
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped">
+                        <table class="table table-hover table-striped datatable">
                             <thead class="table-dark">
                                 <tr>
                                     <th scope="col">Rank</th>
@@ -144,7 +144,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($hasil as $index => $item)
+                                <tr>
+                                    <td>1</td>
+                                    <td>5180</td>
+                                    <td>Sinyo</td>
+                                    <td>0.91</td>
+                                </tr>
+                                <!-- @foreach ($hasil as $index => $item)
                                 <tr>
                                     <th scope="row">{{ $index + 1 }}</th>
                                     <td>{{ $item->siswa_nisn }}</td>
@@ -155,7 +161,7 @@
                                         </span>
                                     </td>
                                 </tr>
-                                @endforeach
+                                @endforeach -->
                             </tbody>
                         </table>
                     </div>
@@ -165,14 +171,14 @@
 
         <!-- Criteria Table -->
         <div class="col-12">
-            <div class="card">
+            <div class="card recent-sales">
                 <div class="card-body">
                     <h5 class="card-title d-flex align-items-center">
                         <i class="bi bi-list-check me-2"></i>
                         Data Kriteria
                     </h5>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-hover table-striped">
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col">#</th>

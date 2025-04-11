@@ -23,7 +23,7 @@
                     </div> --}}
                     <h5 class="card-title">Daftar Penilaian Siswa</h5>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover datatable">
+                        <table class="table table-hover table-striped datatable">
                             <thead>
                                 <tr>
                                     <th>NISN</th>

@@ -1,28 +1,4 @@
 @extends('layouts.app')
-<style>
-    /* Style untuk membatasi lebar kolom tabel agar tidak terlalu lebar */
-    .table-perhitungan th, .table-perhitungan td {
-        text-align: center;
-        vertical-align: middle;
-        padding: 0.4rem; /* Perkecil padding */
-        white-space: nowrap; /* Hindari text wrap jika memungkinkan */
-    }
-    .table-perhitungan th:first-child, .table-perhitungan td:first-child {
-        text-align: left;
-        white-space: normal; /* Izinkan wrap untuk nama */
-        min-width: 150px; /* Lebar minimum kolom nama */
-    }
-    .table-responsive {
-        margin-bottom: 1rem;
-    }
-    .card {
-        margin-bottom: 1.5rem;
-    }
-    /* Atur font lebih kecil di tabel */
-    .table-perhitungan {
-        font-size: 0.85rem;
-    }
-</style>
 @section('content')
     <div class="pagetitle">
         <h1>Perhitungan SPK Metode SMART</h1>
@@ -74,7 +50,7 @@
             <div class="card-body">
                 <h5 class="card-title">Tahap 0: Bobot Kriteria (Setelah Normalisasi Jika Perlu)</h5>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-perhitungan">
+                    <table class="table table-sm table-hover table-striped">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -108,7 +84,7 @@
             <div class="card-body">
                 <h5 class="card-title">Tahap 1: Nilai Agregat (Total per Siswa per Kriteria)</h5>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-perhitungan datatable">
+                    <table class="table table-hover table-striped table-sm datatable">
                         <thead>
                             <tr>
                                 <th>Siswa (NISN)</th>
@@ -137,7 +113,7 @@
             <div class="card-body">
                 <h5 class="card-title">Tahap 2: Nilai Minimum & Maksimum per Kriteria</h5>
                  <div class="table-responsive">
-                     <table class="table table-bordered table-sm table-perhitungan datatable">
+                     <table class="table table-hover table-striped table-sm datatable">
                          <thead>
                              <tr>
                                  <th>Kriteria</th>
@@ -165,7 +141,7 @@
             <div class="card-body">
                 <h1 class="card-title">Tahap 3: Matriks Normalisasi (Nilai Utility 0-1)</h1>
                  <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-perhitungan datatable">
+                    <table class="table table-hover table-striped table-sm datatable">
                         <thead>
                             <tr>
                                 <th>Siswa (NISN)</th>
@@ -195,7 +171,7 @@
             <div class="card-body">
                 <h1 class="card-title">Tahap 4: Matriks Nilai Terbobot (Utility * Bobot)</h1>
                  <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-perhitungan datatable">
+                    <table class="table table-hover table-striped table-sm datatable">
                         <thead>
                             <tr>
                                 <th>Siswa (NISN)</th>
@@ -230,7 +206,7 @@
                      @php
                         $sortedHasil = collect($calculationData['hasil_final_ranking'])->sortBy('ranking')->all();
                      @endphp
-                     <table class="table table-bordered table-striped table-sm table-perhitungan datatable">
+                     <table class="table table-hover table-striped table-sm datatable">
                          <thead class="table-light">
                              <tr>
                                  <th>Ranking</th>
