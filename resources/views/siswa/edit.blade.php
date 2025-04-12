@@ -37,7 +37,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="row mb-3">
+                            {{-- <div class="row mb-3">
                                 <label for="kelas" class="col-sm-3 col-form-label">Kelas</label>
                                 <div class="col-sm-9">
                                     <select name="kelas" class="form-control">
@@ -50,7 +50,7 @@
                                         <span class="text-danger">{{ $errors->first('kelas') }}</span>
                                     @endif
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="row mb-3">
                                 <label for="jeniskelamin" class="col-sm-3 col-form-label">Jenis Kelamin</label>
                                 <div class="col-sm-9">

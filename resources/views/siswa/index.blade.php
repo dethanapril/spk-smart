@@ -31,7 +31,7 @@
                                 <tr>
                                     <th>NISN</th>
                                     <th>Nama</th>
-                                    <th>Kelas</th>
+                                    {{-- <th>Kelas</th> --}}
                                     <th>Jenis Kelamin</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -41,7 +41,7 @@
                                     <tr>
                                         <td>{{ $siswa->nisn }}</td>
                                         <td>{{ $siswa->nama }}</td>
-                                        <td>{{ $siswa->kelas }}</td>
+                                        {{-- <td>{{ $siswa->kelas }}</td> --}}
                                         <td>{{ $siswa->jeniskelamin }}</td>
                                         <td>
                                             <a href="{{ route('siswas.show', $siswa->nisn) }}"><span class="badge bg-secondary"><i class="bi bi-eye"></i></span></a>

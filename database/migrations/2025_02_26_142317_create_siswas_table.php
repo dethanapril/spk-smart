@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('siswas', function (Blueprint $table) {
             $table->string('nisn', 12)->primary();
             $table->string('nama', 255);
-            $table->string('kelas', 3); // Misalnya 'XII', atau 'X M', 'XI A' jika lebih spesifik
             $table->enum('jeniskelamin', ['Laki-laki', 'Perempuan']);
             $table->string('alamat', 50); // Pertimbangkan apakah 50 karakter cukup
             $table->timestamps(); // Kolom created_at dan updated_at

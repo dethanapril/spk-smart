@@ -11,10 +11,10 @@
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section">
+    <section class="section dashboard">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
+                <div class="card recent-sales">
                     <div class="card-body">
                         <h5 class="card-title">Form Edit Penilaian</h5>
 
@@ -28,8 +28,8 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th class="text-center align-middle" style="width: 20%;">Kriteria</th>
-                                            @foreach ($semesters as $semester)
-                                                <th class="text-center">Semester {{ $semester }}</th>
+                                            @foreach ($periodes as $periode)
+                                                <th class="text-center">Periode {{ $periode }}</th>
                                             @endforeach
                                         </tr>
                                     </thead>
@@ -40,21 +40,19 @@
                                                     <strong>{{ $kriteria->nama }}</strong> <br>
                                                     <small class="text-muted">({{ ucfirst($kriteria->jenis) }})</small>
                                                 </td>
-                                                @foreach ($semesters as $semester)
+                                                @foreach ($periodes as $periode)
                                                     <td>
                                                         {{-- Nama input dibuat array: nilai[id_kriteria][nomor_semester] --}}
                                                         <input
                                                             type="number"
-                                                            step="any" {{-- Izinkan desimal --}}
-                                                            class="form-control form-control-sm @error('nilai.' . $kriteria->id . '.' . $semester) is-invalid @enderror"
-                                                            name="nilai[{{ $kriteria->id }}][{{ $semester }}]"
-                                                            {{-- Ambil nilai dari map jika ada, jika tidak kosongkan --}}
-                                                            value="{{ old('nilai.' . $kriteria->id . '.' . $semester, $nilaiMap[$kriteria->id][$semester] ?? '') }}"
-                                                            placeholder="Nilai {{ $semester }}"
-                                                            {{-- Tambahkan atribut lain jika perlu (min, max) --}}
+                                                            step="any"
+                                                            class="form-control form-control-sm @error('nilai.' . $kriteria->id . '.' . $periode) is-invalid @enderror"
+                                                            name="nilai[{{ $kriteria->id }}][{{ $periode }}]"
+                                                            value="{{ old('nilai.' . $kriteria->id . '.' . $periode, $nilaiMap[$kriteria->id][$periode] ?? 0) }}"
                                                             min="0"
-                                                            >
-                                                         @error('nilai.' . $kriteria->id . '.' . $semester)
+                                                        />
+
+                                                         @error('nilai.' . $kriteria->id . '.' . $periode)
                                                             <div class="invalid-feedback">
                                                                 {{ $message }}
                                                             </div>
@@ -64,7 +62,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="{{ count($semesters) + 1 }}" class="text-center">
+                                                <td colspan="{{ count($periodes) + 1 }}" class="text-center">
                                                     Belum ada data kriteria. Silakan tambahkan kriteria terlebih dahulu.
                                                 </td>
                                             </tr>

@@ -18,9 +18,9 @@
         <div class="col-lg-12">
             <div class="card recent-sales">
                 <div class="card-body">
-                    {{-- <div class="d-flex justify-content-between align-items-center">
-                        <a class="btn btn-sm btn-primary" href="{{ route('penilaians.create') }}"><i class="bi bi-plus"></i></a>
-                    </div> --}}
+                    <div class="d-flex justify-content-between align-items-center">
+                        {{-- <a class="btn btn-sm btn-primary" href="{{ route('penilaians.create') }}"><i class="bi bi-plus"></i></a> --}}
+                    </div>
                     <h5 class="card-title">Daftar Penilaian Siswa</h5>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped datatable">

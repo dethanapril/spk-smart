@@ -35,7 +35,7 @@ class SiswaController extends Controller
             'nisn' => 'required|string|max:60|unique:siswas',
             'nama' => 'required|string|max:50',
             'jeniskelamin' => 'required|in:Laki-laki,Perempuan',
-            'kelas' => 'required|string|max:50',
+            // 'kelas' => 'required|string|max:50',
             'alamat' => 'required|string|max:50',
         ]);
 
@@ -69,7 +69,7 @@ class SiswaController extends Controller
         $request->validate([
             'nama' => 'required|string|max:50',
             'jeniskelamin' => 'required|in:Laki-laki,Perempuan',
-            'kelas' => 'required|string|max:50',
+            // 'kelas' => 'required|string|max:50',
             'alamat' => 'required|string|max:50',
         ]);
 

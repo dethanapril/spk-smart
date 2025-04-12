@@ -60,6 +60,38 @@
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card danger-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Siswa</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-trophy fs-4"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h2 class="mb-0">{{ $siswa ?? 0 }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card success-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Siswa Berprestasi</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-people fs-4"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h2 class="mb-0">{{ $siswaBerprestasi ?? 0 }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> --}}
+
+                <div class="col-xxl-3 col-md-6">
                     <div class="card info-card primary-card">
                         <div class="card-body">
                             <h5 class="card-title">Kriteria</h5>
@@ -75,23 +107,7 @@
                     </div>
                 </div>
 
-                <div class="col-xxl-3 col-md-6">
-                    <div class="card info-card success-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Siswa Berprestasi</h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-people fs-4"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h2 class="mb-0">{{ $siswaBerprestasi ?? 0 }}</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xxl-3 col-md-6">
+                {{-- <div class="col-xxl-3 col-md-6">
                     <div class="card info-card warning-card">
                         <div class="card-body">
                             <h5 class="card-title">Rata-rata Nilai</h5>
@@ -105,28 +121,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-xxl-3 col-md-6">
-                    <div class="card info-card danger-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Siswa</h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-trophy fs-4"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h2 class="mb-0">{{ $siswa ?? 0 }}</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div> --}}
             </div>
         </div>
 
         <!-- Top Students Table -->
-        <div class="col-12">
+        {{-- <div class="col-12">
             <div class="card recent-sales">
                 <div class="card-body">
                     <h5 class="card-title d-flex align-items-center">
@@ -144,30 +144,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>5180</td>
-                                    <td>Sinyo</td>
-                                    <td>0.91</td>
-                                </tr>
-                                <!-- @foreach ($hasil as $index => $item)
-                                <tr>
-                                    <th scope="row">{{ $index + 1 }}</th>
-                                    <td>{{ $item->siswa_nisn }}</td>
-                                    <td>{{ $item->siswa->nama }}</td>
-                                    <td>
-                                        <span class="badge bg-primary rounded-pill">
-                                            {{ $item->nilai_total_smart }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                @endforeach -->
+                                @foreach ($hasil as $index => $item)
+                                    <tr>
+                                        <th scope="row">{{ $index + 1 }}</th>
+                                        <td>{{ $item->siswa_nisn }}</td>
+                                        <td>{{ $item->siswa->nama }}</td>
+                                        <td>
+                                            <span class="badge bg-primary rounded-pill">
+                                                {{ $item->nilai_total_smart }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Criteria Table -->
         <div class="col-12">

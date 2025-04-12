@@ -25,11 +25,11 @@ class DashboardController extends Controller
         $kriteriaCount = Kriteria::count();
 
         // 3. Hitung Jumlah Penilaian
-        $penilaianCount = Penilaian::count();
+        // $penilaianCount = Penilaian::count();
 
         // 4. Hitung Jumlah Hasil dan Data Hasil
-        $hasilCount = Hasil::count();
-        $hasil      = Hasil::all();
+        // $hasilCount = Hasil::count();
+        // $hasil      = Hasil::all();
 
         // 5. Data Kriteria
         $kriterias = Kriteria::all();
@@ -38,10 +38,10 @@ class DashboardController extends Controller
         return view('dashboard', [
             'alternatifCount' => $alternatifCount,
             'kriteriaCount' => $kriteriaCount,
-            'hasilCount' => $hasilCount,
-            'hasil' => $hasil,
+            // 'hasilCount' => $hasilCount,
+            // 'hasil' => $hasil,
             'kriterias' => $kriterias,
-            'penilaianCount' => $penilaianCount,
+            // 'penilaianCount' => $penilaianCount,
         ]);
     }
 }

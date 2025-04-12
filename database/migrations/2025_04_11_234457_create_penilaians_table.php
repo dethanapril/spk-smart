@@ -28,12 +28,12 @@ return new class extends Migration
                   ->onDelete('cascade') // Jika kriteria dihapus, penilaiannya ikut terhapus
                   ->onUpdate('cascade');
 
-            $table->integer('semester')->comment('Semester ke- (1 s/d 5)');
-            $table->float('nilai')->comment('Nilai mentah untuk kriteria ini di semester ini');
+            $table->string('periode', 255);
+            $table->float('nilai');
             $table->timestamps(); // Kolom created_at dan updated_at
 
             // Mencegah duplikasi data untuk siswa, kriteria, dan semester yang sama
-            $table->unique(['siswa_nisn', 'kriteria_id', 'semester']);
+            $table->unique(['siswa_nisn', 'kriteria_id', 'periode']);
         });
     }
 

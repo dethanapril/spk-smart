@@ -31,12 +31,12 @@
                                 <p class="form-control-plaintext">{{ $siswa->nama }}</p>
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        {{-- <div class="row mb-3">
                             <label for="jeniskelamin" class="col-sm-3 col-form-label">Kelas</label>
                             <div class="col-sm-9">
                                 <p class="form-control-plaintext">{{ $siswa->kelas }}</p>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row mb-3">
                             <label for="jeniskelamin" class="col-sm-3 col-form-label">Jenis Kelamin</label>
                             <div class="col-sm-9">

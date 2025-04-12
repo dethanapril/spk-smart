@@ -27,7 +27,7 @@ class Penilaian extends Model
     protected $fillable = [
         'siswa_nisn', // Sesuaikan dengan nama kolom di migrasi
         'kriteria_id',
-        'semester',
+        'periode',
         'nilai',
     ];
 

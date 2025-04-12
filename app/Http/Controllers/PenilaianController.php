@@ -7,6 +7,7 @@ use App\Models\Penilaian;
 use App\Models\Siswa;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB; // Untuk transaction
 use Illuminate\View\View;
 
@@ -31,22 +32,28 @@ class PenilaianController extends Controller
      */
     public function edit(Siswa $siswa): View
     {
-        // Ambil semua kriteria
-        $kriterias = Kriteria::orderBy('id')->get(); // Urutkan berdasarkan ID atau kode
-
-        // Ambil semua data penilaian yang SUDAH ADA untuk siswa ini
+        $kriterias = Kriteria::orderBy('id')->get();
         $existingPenilaian = Penilaian::where('siswa_nisn', $siswa->nisn)->get();
 
-        // Buat map nilai agar mudah diakses di view: [kriteria_id][semester] => nilai
         $nilaiMap = [];
         foreach ($existingPenilaian as $penilaian) {
-            $nilaiMap[$penilaian->kriteria_id][$penilaian->semester] = $penilaian->nilai;
+            $nilaiMap[$penilaian->kriteria_id][$penilaian->periode] = $penilaian->nilai;
         }
 
-        // Jumlah semester yang akan ditampilkan (misal 1-5)
-        $semesters = range(1, 5);
+        // Hitung tahun ajaran dari 3 tahun sebelumnya sampai sekarang
+        $tahunSekarang = Carbon::now()->year;
+        $jumlahTahun = 3;
+        $periodes = [];
 
-        return view('penilaian.edit', compact('siswa', 'kriterias', 'nilaiMap', 'semesters'));
+        for ($i = $jumlahTahun; $i >= 1; $i--) {
+            $tahunAwal = $tahunSekarang - $i;
+            $tahunAkhir = $tahunAwal + 1;
+
+            $periodes[] = "$tahunAwal/$tahunAkhir Ganjil";
+            $periodes[] = "$tahunAwal/$tahunAkhir Genap";
+        }
+
+        return view('penilaian.edit', compact('siswa', 'kriterias', 'nilaiMap', 'periodes'));
     }
 
     /**
@@ -57,18 +64,27 @@ class PenilaianController extends Controller
      */
     public function update(Request $request, Siswa $siswa): RedirectResponse
     {
-        // Ambil semua input nilai dari form (berupa array)
         $inputNilai = $request->input('nilai', []);
-        $kriterias = Kriteria::all(); // Ambil semua kriteria untuk iterasi
+        $kriterias = Kriteria::all();
 
-        // Validasi (Contoh sederhana, sesuaikan kebutuhan)
+        // Generate daftar periode dinamis
+        $tahunSekarang = Carbon::now()->year;
+        $jumlahTahun = 3;
+        $periodes = [];
+
+        for ($i = $jumlahTahun; $i >= 1; $i--) {
+            $tahunAwal = $tahunSekarang - $i;
+            $tahunAkhir = $tahunAwal + 1;
+
+            $periodes[] = "$tahunAwal/$tahunAkhir Ganjil";
+            $periodes[] = "$tahunAwal/$tahunAkhir Genap";
+        }
+
+        // Validasi
         $validatorRules = [];
         foreach ($kriterias as $kriteria) {
-            for ($semester = 1; $semester <= 5; $semester++) {
-                // Membuat aturan validasi untuk setiap input nilai
-                // 'nullable' agar boleh kosong, 'numeric' harus angka
-                // Tambahkan aturan lain jika perlu (min, max, etc.)
-                $validatorRules["nilai.{$kriteria->id}.{$semester}"] = 'nullable|numeric|min:0'; // Contoh: min 0
+            foreach ($periodes as $periode) {
+                $validatorRules["nilai.{$kriteria->id}.{$periode}"] = 'nullable|numeric|min:0';
             }
         }
 
@@ -77,52 +93,35 @@ class PenilaianController extends Controller
             'nilai.*.*.min' => 'Nilai tidak boleh negatif.',
         ]);
 
-
-        // Gunakan database transaction untuk memastikan semua data disimpan atau tidak sama sekali
         DB::beginTransaction();
         try {
-            // Iterasi melalui semua kriteria dan semester
             foreach ($kriterias as $kriteria) {
-                 for ($semester = 1; $semester <= 5; $semester++) {
-                    // Ambil nilai dari input, default ke null jika tidak ada atau kosong
-                    $nilaiInput = $inputNilai[$kriteria->id][$semester] ?? null;
+                foreach ($periodes as $periode) {
+                    $nilaiInput = $inputNilai[$kriteria->id][$periode] ?? 0;
 
-                     // Hanya proses jika nilai tidak null (atau sesuai aturan bisnis Anda)
-                     // Jika input kosong dianggap 0, Anda bisa set $nilaiInput = $nilaiInput ?? 0;
-                    if ($nilaiInput !== null && $nilaiInput !== '') {
-                         Penilaian::updateOrCreate(
-                            [
-                                // Kunci untuk mencari record yang ada
-                                'siswa_nisn' => $siswa->nisn,
-                                'kriteria_id' => $kriteria->id,
-                                'semester' => $semester,
-                            ],
-                            [
-                                // Nilai yang akan diupdate atau dibuat
-                                'nilai' => (float) $nilaiInput, // Pastikan tipe datanya float/double
-                            ]
-                        );
-                    } else {
-                         // Opsional: Jika input kosong, apakah record penilaian yang ada harus dihapus?
-                         // Penilaian::where('siswa_nisn', $siswa->nisn)
-                         //        ->where('kriteria_id', $kriteria->id)
-                         //        ->where('semester', $semester)
-                         //        ->delete();
-                    }
+                    Penilaian::updateOrCreate(
+                        [
+                            'siswa_nisn' => $siswa->nisn,
+                            'kriteria_id' => $kriteria->id,
+                            'periode' => $periode,
+                        ],
+                        [
+                            'nilai' => (float) $nilaiInput,
+                        ]
+                    );
                 }
             }
 
-            DB::commit(); // Simpan semua perubahan jika tidak ada error
+            DB::commit();
 
             return redirect()->route('penilaian.edit', $siswa->nisn)
-                         ->with('success', 'Data penilaian untuk ' . $siswa->nama . ' berhasil diperbarui.');
+                ->with('success', 'Data penilaian untuk ' . $siswa->nama . ' berhasil diperbarui.');
 
         } catch (\Exception $e) {
-            DB::rollBack(); // Batalkan semua perubahan jika terjadi error
+            DB::rollBack();
 
-            // Log error $e->getMessage();
             return redirect()->route('penilaian.edit', $siswa->nisn)
-                         ->with('error', 'Terjadi kesalahan saat menyimpan data penilaian: ' . $e->getMessage());
+                ->with('error', 'Terjadi kesalahan saat menyimpan data penilaian: ' . $e->getMessage());
         }
     }
 }
